@@ -1,0 +1,30 @@
+{
+  "name": "android-home-test",
+  "version": "1.0.0",
+  "description": "Android Mobile Automation Test",
+  "main": "index.js",
+  "scripts": {
+    "test": "wdio"
+  },
+  "keywords": [
+    "Appium",
+    "WebdriverIO",
+    "Android-Automation",
+    "Mobile-Automation"
+  ],
+  "author": "Herlina Zainal",
+  "license": "ISC",
+  "dependencies": {
+    "@wdio/cli": "^8.36.1",
+    "@wdio/globals": "^8.36.1",
+    "@wdio/local-runner": "^8.36.1",
+    "@wdio/mocha-framework": "^8.36.1",
+    "webdriverio": "^8.36.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.5",
+    "@babel/core": "^7.24.5",
+    "@babel/preset-env": "^7.24.5",
+    "@babel/register": "^7.23.7"
+  }
+}

@@ -1,0 +1,398 @@
+{
+	"info": {
+		"_postman_id": "6e6e3957-ba20-457a-b0b7-23f611b2d1b7",
+		"name": "E2E-CRUD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16710048"
+	},
+	"item": [
+		{
+			"name": "create-user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Positive Case",
+							"",
+							"// Check the status code",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// Check response body",
+							"pm.test(\"Response should have name property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('name', 'Jeanne');",
+							"});",
+							"",
+							"pm.test(\"Response should have job property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('job', 'Test Engineer');",
+							"});",
+							"",
+							"pm.test(\"Response should have an ID\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('id');",
+							"});",
+							"",
+							"pm.test(\"Response should have createdAt property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('createdAt');",
+							"});",
+							"",
+							"// Negative Case",
+							"",
+							"// POST invalid body format",
+							"// pm.test(\"Status code is 400 when invalid body format is sent\", function () {",
+							"//     pm.sendRequest({",
+							"//         url: \"https://reqres.in/api/users\",",
+							"//         method: \"POST\",",
+							"//         header: {",
+							"//             \"Content-Type\": \"application/json\"",
+							"//         },",
+							"//         body: {",
+							"//             \"name\": \"Rudy\",",
+							"//             \"job\": \"Engineering Manager\",",
+							"//         }",
+							"//     }, function (err, res) {",
+							"//         pm.expect(res).to.have.status(400);",
+							"//     });",
+							"// });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jeanne\",\n    \"job\": \"Test Engineer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_allUsers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Positive Case",
+							"",
+							"// Check the status code",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check response body",
+							"pm.test(\"Response body should contains data with array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('data');",
+							"    pm.expect(jsonData.data).to.be.an('array');",
+							"});",
+							"",
+							"pm.test(\"Response body should contain page property\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('page');",
+							"    pm.expect(jsonData.page).to.eq(2);",
+							"    pm.expect(jsonData).to.have.property('per_page');",
+							"});",
+							"",
+							"pm.test(\"Response body should contain total property\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('total');",
+							"    pm.expect(jsonData.total).to.eq(12);",
+							"    pm.expect(jsonData).to.have.property('total_pages');",
+							"});",
+							"",
+							"// Negative Case ",
+							"",
+							"// GET invalid page number",
+							"// pm.test(\"Status code is should be 404 for invalid page number\", function () {",
+							"//     pm.sendRequest({",
+							"//         url: \"https://reqres.in/api/users?page=999\",",
+							"//         method: \"GET\"",
+							"//     }, function(err, res){",
+							"//         pm.expect(res).to.have.status(404)",
+							"//     });",
+							"// });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/users?page=2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Positive Case",
+							"",
+							"// Check the status code",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check response body",
+							"pm.test(\"Response body should be updated the fields\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('name', 'Jason');",
+							"    pm.expect(jsonData).to.have.property('job', 'Project Manager')",
+							"});",
+							"",
+							"pm.test(\"Response should be have updatedAt property\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('updatedAt');",
+							"});",
+							"",
+							"",
+							"// Negative Case",
+							"",
+							"// UPDATE data with invalid user ID",
+							"// pm.test(\"Status code is 404 for invalid user ID\", function () {",
+							"//     pm.sendRequest({",
+							"//         url: \"https://reqres.in/api/users/999\",",
+							"//         method: \"PUT\",",
+							"//         header: {",
+							"//             \"Content-Type\": \"application/json\"",
+							"//         },",
+							"//         body: {",
+							"//             \"name\": \"James\",",
+							"//             \"job\": \"Test Manager\"",
+							"//         }",
+							"//     }, function(err, res) {",
+							"//         pm.expect(res).to.have.status(404)",
+							"//     })",
+							"// })"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jason\",\n    \"job\": \"Project Manager\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_singleUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Positive Case",
+							"",
+							"// Check the status code",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check response body",
+							"pm.test(\"Response has user data & ID property\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('data');",
+							"    pm.expect(jsonData.data).to.have.property('id', 2);",
+							"});",
+							"",
+							"pm.test(\"Response has email, first_name, and last_name property \", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.have.property('email', 'janet.weaver@reqres.in');",
+							"    pm.expect(jsonData.data).to.have.property('first_name', 'Janet');",
+							"    pm.expect(jsonData.data).to.have.property('last_name', 'Weaver');",
+							"});",
+							"",
+							"// Negative Case",
+							"",
+							"// GET user not found",
+							"pm.test(\"Status code is 404 for non-exist user\", function () {",
+							"    pm.sendRequest({",
+							"        url: \"https://reqres.in/api/users/999\",",
+							"        method: \"GET\"",
+							"    }, function(err, res){",
+							"        pm.expect(res).to.have.status(404);",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Positive Case",
+							"",
+							"// Check the status code",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"// Negative Case",
+							"",
+							"// DELETE non-exist user",
+							"// pm.test(\"Status code is 404 for non-exist user\", function () {",
+							"//     pm.sendRequest({",
+							"//         url: \"https://reqres.in/api/users/999\",",
+							"//         method: \"DELETE\"",
+							"//     }, function(err, res) {",
+							"//         pm.expect(res).to.have.status(404);",
+							"//     });",
+							"// });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/users/2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://reqres.in/api",
+			"type": "string"
+		}
+	]
+}
